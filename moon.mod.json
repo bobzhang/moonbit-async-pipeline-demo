@@ -1,0 +1,6 @@
+{
+  "name": "demo/async_fancy",
+  "version": "0.1.0",
+  "deps": { "moonbitlang/async": "0.18.1" },
+  "preferred-target": "native"
+}
