@@ -3,7 +3,7 @@ name = "demo/async_fancy"
 version = "0.1.0"
 
 import {
-  "moonbitlang/async@0.18.1",
+  "moonbitlang/async@0.22.9",
 }
 
 preferred_target = "native"
