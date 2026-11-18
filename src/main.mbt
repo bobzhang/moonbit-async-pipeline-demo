@@ -10,19 +10,19 @@
 
 ///|
 struct Job {
-  id : Int
-  n : Int
+  id : Int32
+  n : Int32
 }
 
 ///|
 struct Done {
-  job_id : Int
-  worker : Int
+  job_id : Int32
+  worker : Int32
   text : String
 }
 
 ///|
-fn fizzbuzz(n : Int) -> String {
+fn fizzbuzz(n : Int32) -> String {
   match (n % 3, n % 5) {
     (0, 0) => "FizzBuzz"
     (0, _) => "Fizz"
@@ -32,15 +32,15 @@ fn fizzbuzz(n : Int) -> String {
 }
 
 ///|
-let total_jobs : Int = 15
+let total_jobs : Int32 = 15
 
 ///|
-let n_workers : Int = 4
+let n_workers : Int32 = 4
 
 ///|
 async fn producer(input : @aqueue.Queue[Job]) -> Unit {
-  for i in 1..=total_jobs {
-    input.put({ id: i, n: i })
+  for i in 1..<=total_jobs {
+    input.put({ id: i, n: i, })
     @async.sleep(20) // simulate jobs arriving
   }
   input.close() // signal: no more work
@@ -48,19 +48,17 @@ async fn producer(input : @aqueue.Queue[Job]) -> Unit {
 
 ///|
 async fn worker(
-  id : Int,
+  id : Int32,
   rng : @random.Rand,
   input : @aqueue.Queue[Job],
   output : @aqueue.Queue[Done],
 ) -> Unit {
   // Loop until input.get() raises QueueAlreadyClosed.
   while true {
-    let job = try input.get() catch {
-      _ => break
-    }
+    let job = input.get() catch { _ => break }
     let think_ms = 30 + rng.int(limit=120)
     @async.sleep(think_ms)
-    output.put({ job_id: job.id, worker: id, text: fizzbuzz(job.n) })
+    output.put({ job_id: job.id, worker: id, text: fizzbuzz(job.n), })
   }
 }
 
@@ -75,7 +73,7 @@ async fn collector(output : @aqueue.Queue[Done], start : Int64) -> Unit {
 }
 
 ///|
-fn pad2(n : Int) -> String {
+fn pad2(n : Int32) -> String {
   if n < 10 {
     "0\{n}"
   } else {
@@ -84,7 +82,7 @@ fn pad2(n : Int) -> String {
 }
 
 ///|
-fn pad4(n : Int) -> String {
+fn pad4(n : Int32) -> String {
   let s = n.to_string()
   match s.length() {
     1 => "000\{s}"
@@ -102,7 +100,7 @@ async fn pipeline() -> Unit {
   let start = @async.now()
   @async.with_task_group(group => {
     group.spawn_bg(() => producer(input))
-    for w in 1..=n_workers {
+    for w in 1..<=n_workers {
       group.spawn_bg(() => worker(w, rng, input, output))
     }
     // Run collector on this task; group returns when collector finishes
