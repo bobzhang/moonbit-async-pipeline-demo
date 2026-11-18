@@ -94,9 +94,9 @@ fn pad4(n : Int32) -> String {
 
 ///|
 async fn pipeline() -> Unit {
-  let input : @aqueue.Queue[Job] = @aqueue.Queue::new(kind=Unbounded)
-  let output : @aqueue.Queue[Done] = @aqueue.Queue::new(kind=Unbounded)
-  let rng = @random.Rand::new()
+  let input : @aqueue.Queue[Job] = @aqueue.Queue::Queue(kind=Unbounded)
+  let output : @aqueue.Queue[Done] = @aqueue.Queue::Queue(kind=Unbounded)
+  let rng = @random.Rand::Rand()
   let start = @async.now()
   @async.with_task_group(group => {
     group.spawn_bg(() => producer(input))

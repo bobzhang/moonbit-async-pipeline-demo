@@ -1,0 +1,15 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "demo/async_fancy/src"
+
+// Values
+
+// Errors
+
+// Types and methods
+type Done
+
+type Job
+
+// Type aliases
+
+// Traits
